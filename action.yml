@@ -42,7 +42,7 @@ outputs:
 runs:
   using: "docker"
   image: "docker://ghcr.io/trufflesecurity/trufflehog:latest"
-  entrypoint: scripts/actions_handler.sh
+  entrypoint: ./scripts/actions_handler.sh
   args:
     - -e COMMAND=${{ inputs.search }}
     - -e PATH=${{ inputs.path }}
