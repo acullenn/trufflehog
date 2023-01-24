@@ -3,33 +3,51 @@ description: 'Scan Github Actions with TruffleHog'
 author: Truffle Security Co. <support@trufflesec.com>
 
 inputs:
+  search:
+    description: >- 
+      Trufflehog subcommand to execute. (Default: git)
+      Valid Options: [git, github, s3]
+    default: "git"
   path:
-    description: Repository path
-    required: true
-  base:
-    description: Start scanning from here (usually main branch).
+    description: Path to repository, folder, or s3 bucket to search
     required: false
-    default: ''
-  head:
-    description: Scan commits until here (usually dev branch).
+  organization:
+    description: >-
+      Name of GitHub Organization to search
+      Only required when specifying Github as search command
     required: false
   extra_args:
     default: ''
     description: Extra args to be passed to the trufflehog cli.
     required: false
+  fail:
+    description: Exit with code 183 if results are found
+    required: false
+    default: true
+  token:
+    description: Personal Access Token to use for GitHub Organization Scan 
+    required: false
+  json_output:
+    description: Return Scan Results as JSON Outputs rather than printing to screen
+    required: false
+    default: false
 branding:
   icon: "shield"
   color: "green"
+outputs:
+  json-data:
+    description: >- 
+      JSON Output from Trufflehog
+      Requires json_output be set to true
 runs:
   using: "docker"
   image: "docker://ghcr.io/trufflesecurity/trufflehog:latest"
   args:
-    - git
-    - file://${{ inputs.path }}
-    - --since-commit
-    - ${{ inputs.base }}
-    - --branch
-    - ${{ inputs.head }}
-    - --fail
-    - --no-update
-    - ${{ inputs.extra_args }}
+    - --entrypoint scripts/actions_inputs.sh
+    - -e COMMAND=${{ inputs.search }}
+    - -e PATH=${{ inputs.path }}
+    - -e FAIL=${{ inputs.fail }}
+    - -e TOKEN=${{ inputs.token }}
+    - -e JSON=${{ inputs.json_output }}
+    - -e ORG=${{ inputs.organization }}
+    - -e EXTRA_ARGS=${{ inputs.extra_args }}
