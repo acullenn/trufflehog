@@ -42,8 +42,8 @@ outputs:
 runs:
   using: "docker"
   image: "docker://ghcr.io/trufflesecurity/trufflehog:latest"
+  entrypoint: scripts/actions_handler.sh
   args:
-    - --entrypoint scripts/actions_inputs.sh
     - -e COMMAND=${{ inputs.search }}
     - -e PATH=${{ inputs.path }}
     - -e FAIL=${{ inputs.fail }}
