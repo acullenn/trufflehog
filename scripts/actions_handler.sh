@@ -2,7 +2,7 @@
 
 # Build Args from Inputs
 echo $EXTRA_ARGS
-
+ls
 case $COMMAND in
 'git')
     cmd_args="${PATH}"

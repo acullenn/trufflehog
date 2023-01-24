@@ -42,12 +42,12 @@ outputs:
 runs:
   using: "docker"
   image: "docker://ghcr.io/trufflesecurity/trufflehog:latest"
-  entrypoint: ./scripts/actions_handler.sh
-  args:
-    - -e COMMAND=${{ inputs.search }}
-    - -e PATH=${{ inputs.path }}
-    - -e FAIL=${{ inputs.fail }}
-    - -e TOKEN=${{ inputs.token }}
-    - -e JSON=${{ inputs.json_output }}
-    - -e ORG=${{ inputs.organization }}
-    - -e EXTRA_ARGS=${{ inputs.extra_args }}
+  entrypoint: ${{ github.workspace }}/scripts/actions_handler.sh
+  env:
+    COMMAND: ${{ inputs.search }}
+    PATH: ${{ inputs.path }}
+    FAIL: ${{ inputs.fail }}
+    TOKEN: ${{ inputs.token }}
+    JSON: ${{ inputs.json_output }}
+    ORG: ${{ inputs.organization }}
+    EXTRA_ARGS: ${{ inputs.extra_args }}
